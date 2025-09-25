@@ -456,6 +456,37 @@ async def clear_table(table_number: str):
     
     return {"message": "Table cleared successfully"}
 
+@api_router.delete("/tables/{table_id}")
+async def delete_table(table_id: str):
+    """Delete a table"""
+    # Check if table has any active orders
+    active_orders = await db.orders.count_documents({
+        "table_number": {"$exists": True},
+        "status": {"$in": ["pending", "cooking", "ready"]}
+    })
+    
+    table = await db.tables.find_one({"id": table_id})
+    if not table:
+        raise HTTPException(status_code=404, detail="Table not found")
+    
+    # Check if this specific table has active orders
+    table_orders = await db.orders.count_documents({
+        "table_number": table["table_number"],
+        "status": {"$in": ["pending", "cooking", "ready"]}
+    })
+    
+    if table_orders > 0:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Cannot delete table {table['table_number']} - it has active orders"
+        )
+    
+    result = await db.tables.delete_one({"id": table_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Table not found")
+    
+    return {"message": f"Table {table['table_number']} deleted successfully"}
+
 @api_router.post("/tables/initialize-default")
 async def initialize_default_tables():
     # Check if tables already exist
