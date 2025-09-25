@@ -436,6 +436,19 @@ async def assign_order_to_table(table_number: str, order_id: str):
     
     return {"message": "Order assigned to table successfully"}
 
+@api_router.post("/tables/{table_number}/clear")
+async def clear_table(table_number: str):
+    """Clear a table after payment is complete"""
+    table_result = await db.tables.update_one(
+        {"table_number": table_number},
+        {"$set": {"status": "available", "current_order_id": None}}
+    )
+    
+    if table_result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Table not found")
+    
+    return {"message": "Table cleared successfully"}
+
 @api_router.post("/tables/initialize-default")
 async def initialize_default_tables():
     # Check if tables already exist
