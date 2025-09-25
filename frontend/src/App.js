@@ -641,7 +641,7 @@ const Dashboard = () => {
 };
 
 // Invoice Component
-const InvoiceModal = ({ order, isOpen, onClose }) => {
+const InvoiceModal = ({ order, isOpen, onClose, onPaymentComplete }) => {
   const currentDate = new Date();
   const gstRate = 0.05; // 5% GST
   const subtotal = order?.total_amount || 0;
