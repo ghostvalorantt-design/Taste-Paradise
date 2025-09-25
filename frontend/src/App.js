@@ -280,6 +280,55 @@ const TableManagement = ({ onTableSelect }) => {
             <p>No tables found. Initializing default tables...</p>
           </div>
         )}
+
+        {/* Add New Table Form */}
+        {showAddTable && (
+          <Card className="mt-6 border-orange-200">
+            <CardHeader>
+              <CardTitle>Add New Table</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={addNewTable} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="table_number">Table Number</Label>
+                    <Input
+                      id="table_number"
+                      value={newTableData.table_number}
+                      onChange={(e) => setNewTableData({...newTableData, table_number: e.target.value})}
+                      placeholder="e.g., T7"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="capacity">Capacity (People)</Label>
+                    <Input
+                      id="capacity"
+                      type="number"
+                      value={newTableData.capacity}
+                      onChange={(e) => setNewTableData({...newTableData, capacity: parseInt(e.target.value)})}
+                      min="1"
+                      max="20"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <Button type="submit" className="bg-orange-600 hover:bg-orange-700">
+                    Add Table
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => setShowAddTable(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        )}
       </CardContent>
     </Card>
   );
