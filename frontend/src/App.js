@@ -197,7 +197,7 @@ const TableManagement = ({ onTableSelect }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
+        <CardTitle className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <span>🏪 Restaurant Tables</span>
             <Button 
@@ -209,6 +209,14 @@ const TableManagement = ({ onTableSelect }) => {
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             </Button>
           </div>
+          <Button 
+            onClick={() => setShowAddTable(true)} 
+            size="sm" 
+            className="bg-orange-600 hover:bg-orange-700"
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            Add Table
+          </Button>
         </CardTitle>
       </CardHeader>
       <CardContent>
