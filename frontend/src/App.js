@@ -636,6 +636,14 @@ const Dashboard = () => {
       <div className="mt-8">
         <TableManagement onTableSelect={handleTableSelect} />
       </div>
+
+      {/* Invoice Modal */}
+      <InvoiceModal 
+        order={selectedOrder}
+        isOpen={showInvoice}
+        onClose={() => setShowInvoice(false)}
+        onPaymentComplete={handlePaymentComplete}
+      />
     </div>
   );
 };
