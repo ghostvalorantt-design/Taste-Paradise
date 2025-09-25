@@ -468,27 +468,51 @@ const Dashboard = () => {
     }
   };
 
-  const handleTableSelect = (table) => {
+  const handleTableSelect = async (table, action = null, order = null) => {
     setSelectedTable(table);
     
-    // Show table actions dialog
-    const action = window.confirm(`Table ${table.table_number} (${table.status})\n\nActions:\nOK - Create New Order\nCancel - View Table Orders`);
-    
-    if (action) {
+    if (action === 'generate-bill' && order) {
+      // Show invoice for payment
+      setSelectedOrder(order);
+      setShowInvoice(true);
+    } else if (action === 'new-order') {
       // Create new order for this table
       navigate('/new-order', { state: { selectedTable: table.table_number } });
-    } else {
-      // View table orders or generate KOT
-      if (table.current_order_id) {
-        const kotAction = window.confirm(`Table ${table.table_number} has an active order.\n\nOK - Generate KOT\nCancel - View Orders`);
-        if (kotAction) {
-          navigate('/kot');
-        } else {
-          navigate('/orders');
+    } else if (action === 'view-orders') {
+      navigate('/orders');
+    }
+  };
+
+  const handlePaymentComplete = async (orderId, paymentMethod) => {
+    try {
+      // Update payment status
+      await axios.put(`${API}/orders/${orderId}`, { 
+        payment_status: 'paid', 
+        payment_method: paymentMethod,
+        status: 'served'
+      });
+
+      // Clear the table (make it available)
+      const order = orders.find(o => o.id === orderId);
+      if (order && order.table_number) {
+        // Find the table by table number and update its status
+        const tablesResponse = await axios.get(`${API}/tables`);
+        const table = tablesResponse.data.find(t => t.table_number === order.table_number);
+        
+        if (table) {
+          await axios.put(`${API}/tables/${table.id}`, { 
+            status: 'available',
+            current_order_id: null
+          });
         }
-      } else {
-        navigate('/orders');
       }
+
+      await refreshData();
+      setShowInvoice(false);
+      alert(`Payment received via ${paymentMethod}! Table is now available.`);
+    } catch (error) {
+      console.error('Error processing payment:', error);
+      alert('Error processing payment');
     }
   };
 
