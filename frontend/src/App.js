@@ -1508,13 +1508,25 @@ const MenuManagement = () => {
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">Menu Management</h2>
-        <Button 
-          onClick={() => setIsAddingItem(true)}
-          className="bg-orange-600 hover:bg-orange-700"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Add Menu Item
-        </Button>
+        <div className="flex space-x-2">
+          <Button 
+            onClick={() => setIsAddingItem(true)}
+            className="bg-orange-600 hover:bg-orange-700"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Menu Item
+          </Button>
+          {menuItems.length > 0 && (
+            <Button 
+              onClick={clearAllMenuItems}
+              variant="outline"
+              className="border-red-500 text-red-500 hover:bg-red-50"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Clear All ({menuItems.length})
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Add/Edit Form */}
