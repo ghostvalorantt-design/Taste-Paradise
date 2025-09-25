@@ -766,11 +766,30 @@ const InvoiceModal = ({ order, isOpen, onClose, onPaymentComplete }) => {
           </div>
         </div>
 
-        {/* Print Button */}
+        {/* Payment & Print Buttons */}
         <div className="flex justify-end space-x-2 mt-4 no-print">
           <Button variant="outline" onClick={onClose}>
             Close
           </Button>
+          
+          {/* Payment buttons - only show if payment is pending */}
+          {order && order.payment_status === 'pending' && order.status !== 'cancelled' && onPaymentComplete && (
+            <>
+              <Button 
+                onClick={() => onPaymentComplete(order.id, 'cash')}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                💰 Pay Cash
+              </Button>
+              <Button 
+                onClick={() => onPaymentComplete(order.id, 'online')}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                💳 Pay Online
+              </Button>
+            </>
+          )}
+          
           <Button onClick={printInvoice} className="bg-orange-600 hover:bg-orange-700">
             🖨️ Print Invoice
           </Button>
