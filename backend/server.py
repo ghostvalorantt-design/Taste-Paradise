@@ -237,6 +237,13 @@ async def create_order(order_data: OrderCreate):
     order_dict = prepare_for_mongo(order.dict())
     await db.orders.insert_one(order_dict)
     
+    # If table number is provided, update the table status
+    if order.table_number:
+        await db.tables.update_one(
+            {"table_number": order.table_number},
+            {"$set": {"status": "occupied", "current_order_id": order.id}}
+        )
+    
     return order
 
 @api_router.get("/orders", response_model=List[Order])
