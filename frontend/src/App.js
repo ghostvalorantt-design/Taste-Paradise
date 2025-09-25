@@ -449,9 +449,11 @@ const RefreshDataButton = () => {
 
 // Dashboard Component
 const Dashboard = () => {
-  const { dashboardStats, loading } = useRestaurant();
+  const { dashboardStats, loading, orders, refreshData } = useRestaurant();
   const navigate = useNavigate();
   const [selectedTable, setSelectedTable] = useState(null);
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   if (loading || !dashboardStats) {
     return <div className="flex justify-center items-center h-96">Loading...</div>;
