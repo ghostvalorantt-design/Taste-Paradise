@@ -73,9 +73,16 @@ const useRestaurant = () => {
 
 // Table Management Component
 const TableManagement = ({ onTableSelect }) => {
-  const { refreshData } = useRestaurant();
+  const { refreshData, orders } = useRestaurant();
   const [tables, setTables] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showAddTable, setShowAddTable] = useState(false);
+  const [newTableData, setNewTableData] = useState({
+    table_number: '',
+    capacity: 4,
+    position_x: 0,
+    position_y: 0
+  });
 
   useEffect(() => {
     fetchTables();
