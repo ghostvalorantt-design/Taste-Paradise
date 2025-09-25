@@ -194,6 +194,24 @@ const TableManagement = ({ onTableSelect }) => {
     }
   };
 
+  const deleteTable = async (tableId, tableNumber) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete Table ${tableNumber}?\n\nThis action cannot be undone.`
+    );
+    
+    if (confirmDelete) {
+      try {
+        await axios.delete(`${API}/tables/${tableId}`);
+        await fetchTables();
+        alert(`Table ${tableNumber} deleted successfully!`);
+      } catch (error) {
+        console.error('Error deleting table:', error);
+        const errorMessage = error.response?.data?.detail || 'Error deleting table';
+        alert(errorMessage);
+      }
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
