@@ -175,6 +175,25 @@ const TableManagement = ({ onTableSelect }) => {
     }
   };
 
+  const addNewTable = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${API}/tables`, newTableData);
+      await fetchTables();
+      setShowAddTable(false);
+      setNewTableData({
+        table_number: '',
+        capacity: 4,
+        position_x: 0,
+        position_y: 0
+      });
+      alert('New table added successfully!');
+    } catch (error) {
+      console.error('Error adding table:', error);
+      alert('Error adding table');
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
