@@ -1631,8 +1631,9 @@ const MenuManagement = () => {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => deleteItem(item.id)}
+                    onClick={() => deleteItem(item.id, item.name)}
                     className="text-red-600 hover:text-red-700"
+                    title={`Delete ${item.name}`}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
