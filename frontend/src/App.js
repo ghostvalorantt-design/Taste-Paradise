@@ -1447,15 +1447,47 @@ const MenuManagement = () => {
     }
   };
 
-  const deleteItem = async (itemId) => {
-    if (window.confirm('Are you sure you want to delete this item?')) {
+  const deleteItem = async (itemId, itemName) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete "${itemName}"?\n\nThis action cannot be undone.`
+    );
+    
+    if (confirmDelete) {
       try {
         await axios.delete(`${API}/menu/${itemId}`);
         refreshData();
-        alert('Menu item deleted!');
+        alert(`"${itemName}" deleted successfully!`);
       } catch (error) {
         console.error('Error deleting menu item:', error);
         alert('Error deleting menu item');
+      }
+    }
+  };
+
+  const clearAllMenuItems = async () => {
+    const confirmClear = window.confirm(
+      `⚠️ WARNING: This will delete ALL ${menuItems.length} menu items!\n\nThis action cannot be undone. Are you absolutely sure?`
+    );
+    
+    if (confirmClear) {
+      const finalConfirm = window.confirm(
+        'This is your FINAL confirmation.\n\nClick OK to DELETE ALL MENU ITEMS permanently.'
+      );
+      
+      if (finalConfirm) {
+        try {
+          // Delete all menu items
+          const deletePromises = menuItems.map(item => 
+            axios.delete(`${API}/menu/${item.id}`)
+          );
+          await Promise.all(deletePromises);
+          
+          refreshData();
+          alert('All menu items have been deleted successfully!');
+        } catch (error) {
+          console.error('Error clearing menu items:', error);
+          alert('Error clearing some menu items. Please try again.');
+        }
       }
     }
   };
