@@ -272,6 +272,20 @@ const TableManagement = ({ onTableSelect }) => {
                 {getStatusIcon(table.status)}
               </div>
               
+              {/* Delete Button */}
+              <Button
+                size="sm"
+                variant="outline"
+                className="absolute top-1 left-1 p-1 bg-red-500 hover:bg-red-600 text-white border-none"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteTable(table.id, table.table_number);
+                }}
+                title={`Delete Table ${table.table_number}`}
+              >
+                <Trash2 className="h-3 w-3" />
+              </Button>
+              
               {/* Quick Status Change */}
               <div className="absolute bottom-1 left-1 right-1">
                 <select
