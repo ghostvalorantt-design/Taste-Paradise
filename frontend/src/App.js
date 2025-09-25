@@ -131,9 +131,38 @@ const TableManagement = ({ onTableSelect }) => {
     }
   };
 
-  const handleTableClick = (table) => {
-    if (onTableSelect) {
-      onTableSelect(table);
+  const handleTableClick = async (table) => {
+    // Check if table has active orders
+    const tableOrders = orders.filter(order => 
+      order.table_number === table.table_number && 
+      !['served', 'cancelled'].includes(order.status)
+    );
+
+    if (tableOrders.length > 0) {
+      // Table has active orders - show options
+      const choice = window.confirm(
+        `Table ${table.table_number} has ${tableOrders.length} active order(s)\n\n` +
+        `Options:\n` +
+        `OK - Generate Bill & Process Payment\n` +
+        `Cancel - View Orders/Create New Order`
+      );
+
+      if (choice) {
+        // Generate bill for the latest order
+        const latestOrder = tableOrders[tableOrders.length - 1];
+        if (onTableSelect) {
+          onTableSelect(table, 'generate-bill', latestOrder);
+        }
+      } else {
+        if (onTableSelect) {
+          onTableSelect(table, 'view-orders');
+        }
+      }
+    } else {
+      // Table is empty - create new order
+      if (onTableSelect) {
+        onTableSelect(table, 'new-order');
+      }
     }
   };
 
