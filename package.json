@@ -1,0 +1,21 @@
+{
+  "name": "taste-paradise",
+  "version": "1.0.0",
+  "description": "Restaurant Management System with React frontend and FastAPI backend",
+  "scripts": {
+    "install-all": "npm run install-frontend && npm run install-backend",
+    "install-frontend": "cd frontend && npm install",
+    "install-backend": "pip install -r backend/requirements.txt",
+    "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+    "start-frontend": "cd frontend && npm start",
+    "start-backend": "cd backend && python -m uvicorn server:app --reload --host 0.0.0.0 --port 8001",
+    "dev": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": ["restaurant", "management", "react", "fastapi", "mongodb"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
